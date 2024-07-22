@@ -1,13 +1,12 @@
-[project]
+[tool.poetry]
 name = "nnunetv2"
 version = "2.5"
-requires-python = ">=3.9"
 description = "nnU-Net is a framework for out-of-the box image segmentation."
 readme = "readme.md"
-license = { file = "LICENSE" }
+license = "LICENSE"
 authors = [
-    { name = "Fabian Isensee", email = "f.isensee@dkfz-heidelberg.de"},
-    { name = "Helmholtz Imaging Applied Computer Vision Lab" }
+    "Fabian Isensee <f.isensee@dkfz-heidelberg.de>",
+    "Helmholtz Imaging Applied Computer Vision Lab"
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -29,36 +28,36 @@ keywords = [
     'nnU-Net',
     'nnunet'
 ]
-dependencies = [
-    "torch>=2.1.2",
-    "acvl-utils>=0.2,<0.3",  # 0.3 may bring breaking changes. Careful!
-    "dynamic-network-architectures>=0.3.1,<0.4",  # 0.3.1 and lower are supported, 0.4 may have breaking changes. Let's be careful here
-    "tqdm",
-    "dicom2nifti",
-    "scipy",
-    "batchgenerators>=0.25",
-    "numpy",
-    "scikit-learn",
-    "scikit-image>=0.19.3",
-    "SimpleITK>=2.2.1",
-    "pandas",
-    "graphviz",
-    'tifffile',
-    'requests',
-    "nibabel",
-    "matplotlib",
-    "seaborn",
-    "imagecodecs",
-    "yacs",
-    "batchgeneratorsv2",
-    "einops"
-]
+[tool.poetry.dependencies]
+python=">=3.9"
+torch=">=2.1.2"
+acvl-utils=">=0.2,<0.3"  # 0.3 may bring breaking changes. Careful!
+dynamic-network-architectures=">=0.3.1,<0.4"  # 0.3.1 and lower are supported, 0.4 may have breaking changes. Let's be careful here
+tqdm="*"
+dicom2nifti="*"
+scipy="*"
+batchgenerators=">=0.25"
+numpy="<2.0"
+scikit-learn="*"
+scikit-image=">=0.19.3"
+SimpleITK=">=2.2.1"
+pandas="*"
+graphviz="*"
+tifffile="*"
+requests="*"
+nibabel="*"
+matplotlib="*"
+seaborn="*"
+imagecodecs="*"
+yacs="*"
+batchgeneratorsv2="*"
+einops="*"
 
 [project.urls]
 homepage = "https://github.com/MIC-DKFZ/nnUNet"
 repository = "https://github.com/MIC-DKFZ/nnUNet"
 
-[project.scripts]
+[tool.poetry.scripts]
 nnUNetv2_plan_and_preprocess = "nnunetv2.experiment_planning.plan_and_preprocess_entrypoints:plan_and_preprocess_entry"
 nnUNetv2_extract_fingerprint = "nnunetv2.experiment_planning.plan_and_preprocess_entrypoints:extract_fingerprint_entry"
 nnUNetv2_plan_experiment = "nnunetv2.experiment_planning.plan_and_preprocess_entrypoints:plan_experiment_entry"
@@ -80,17 +79,17 @@ nnUNetv2_move_plans_between_datasets = "nnunetv2.experiment_planning.plans_for_p
 nnUNetv2_evaluate_folder = "nnunetv2.evaluation.evaluate_predictions:evaluate_folder_entry_point"
 nnUNetv2_evaluate_simple = "nnunetv2.evaluation.evaluate_predictions:evaluate_simple_entry_point"
 nnUNetv2_convert_MSD_dataset = "nnunetv2.dataset_conversion.convert_MSD_dataset:entry_point"
+nnUNetv2_csv_reorg = "nnunetv2.csv_reorg:main"
 
-[project.optional-dependencies]
-dev = [
-    "black",
-    "ruff",
-    "pre-commit"
-]
+[tool.poetry.group.dev.dependencies]
+black="*"
+ruff="*"
+pre-commit="*"
 
 [build-system]
-requires = ["setuptools>=67.8.0"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 
 [tool.codespell]
 skip = '.git,*.pdf,*.svg'
