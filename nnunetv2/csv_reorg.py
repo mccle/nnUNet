@@ -14,18 +14,18 @@ def reorganize(csv: Path | str, outdir: Path | str, dataset: str = "DATASET", fo
         partition: str = row[f"fold_{fold}"]
         subdir: str = {"train": "imagesTr", "test": "imagesTs"}.get(partition, "imagesTr")
         for i, key in enumerate(im_keys):
-            im_path = Path(outdir) / subdir / f"{dataset}_{row['nnUnetID']}_{i:03d}.nii.gz"
+            im_path = Path(outdir) / subdir / f"{dataset}_{row['nnUnetID']}_{i:04d}.nii.gz"
             im_path.parent.mkdir(parents=True, exist_ok=True)
             im_path.symlink_to(row[key])
 
-        subdir: str = {"train": "labelsTr", "test": "labelsTs"}.get(partition, "imagesTr")
+        subdir: str = {"train": "labelsTr", "test": "labelsTs"}.get(partition, "labelsTr")
         seg_path = Path(outdir) / subdir / f"{dataset}_{row['nnUnetID']}.nii.gz"
         seg_path.parent.mkdir(parents=True, exist_ok=True)
         seg_path.symlink_to(row["seg"])
 
     generate_dataset_json(
         output_folder=str(outdir),
-        channel_names= {"T1Post": 0},
+        channel_names= {"0": "T1Post"},
         labels={"background": 0},
         num_training_cases=df[df[f"fold_{fold}"].isin(["train", "val"])].shape[0],
         file_ending=".nii.gz"

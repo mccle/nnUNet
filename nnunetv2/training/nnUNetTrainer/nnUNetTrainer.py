@@ -11,6 +11,8 @@ from typing import Tuple, Union, List
 
 import numpy as np
 import torch
+import torch._dynamo
+torch._dynamo.config.suppress_errors = True
 from batchgenerators.dataloading.multi_threaded_augmenter import MultiThreadedAugmenter
 from batchgenerators.dataloading.nondet_multi_threaded_augmenter import NonDetMultiThreadedAugmenter
 from batchgenerators.dataloading.single_threaded_augmenter import SingleThreadedAugmenter

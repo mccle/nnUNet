@@ -259,42 +259,46 @@ files = [
 
 [[package]]
 name = "connected-components-3d"
-version = "3.1.2"
-description = "Connected components on 2D and 3D images. Supports multiple labels."
+version = "3.17.0"
+description = "Connected components on discrete and continuous multilabel 3D and 2D images. Handles 26, 18, and 6 connected variants; periodic boundaries (4, 8, & 6)."
 optional = false
-python-versions = "*"
+python-versions = "<4.0,>=3.8"
 files = [
-    {file = "connected-components-3d-3.1.2.tar.gz", hash = "sha256:d3bab5a7680588a3e85f3dd3d03e9d99ef93b03f191dd17f2200c064f23e385e"},
-    {file = "connected_components_3d-3.1.2-cp27-cp27m-macosx_10_15_x86_64.whl", hash = "sha256:983d16ee94baffeb0d450f68a88e76cbfd801162b295990e30c2c4405396527c"},
-    {file = "connected_components_3d-3.1.2-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:54fc7c7f656f475f2c182213a092cf053ea132c40dd5e6373ebd3895b434ee1b"},
-    {file = "connected_components_3d-3.1.2-cp27-cp27m-manylinux2010_x86_64.whl", hash = "sha256:f19436489717db9b8c18101f4e8d72b21034979bfbb93b60858dde85bb9cd7ac"},
-    {file = "connected_components_3d-3.1.2-cp35-cp35m-manylinux1_x86_64.whl", hash = "sha256:7d75de0ec7a6956ea42b878315fc2f2323d57792262de5444307ac89d6a0fbdf"},
-    {file = "connected_components_3d-3.1.2-cp35-cp35m-manylinux2010_x86_64.whl", hash = "sha256:9b773f4bb04035403739be3f0767d923336eb0a70f6d02da13c8f82c7ae695b9"},
-    {file = "connected_components_3d-3.1.2-cp35-cp35m-manylinux2014_x86_64.whl", hash = "sha256:23c021e7f749fef40e5cf8434791956b37105c80f25a7efb5436030eb0aaaf1b"},
-    {file = "connected_components_3d-3.1.2-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:24f9224c69acaf04881afc940386d36baa6195198633ab9ec9e279ce490e240f"},
-    {file = "connected_components_3d-3.1.2-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:281f5e1bddba35cc2897b974972fe9c8d52712f7b8d8c796f1cae70e594ad002"},
-    {file = "connected_components_3d-3.1.2-cp36-cp36m-manylinux2010_x86_64.whl", hash = "sha256:0858d27d09d8607ede539ae7ab6927616304d449e3e417145cdea2aeb23ce3cd"},
-    {file = "connected_components_3d-3.1.2-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:3cfca755c0ab17f13c88f0bb4f76b7019568fd27cee65ca8821ebb46153b1c4e"},
-    {file = "connected_components_3d-3.1.2-cp36-cp36m-win32.whl", hash = "sha256:855f0e13da835a7def2438bcd7dcd605ed14dc8dfe844d7e95c61e8cc8878a97"},
-    {file = "connected_components_3d-3.1.2-cp36-cp36m-win_amd64.whl", hash = "sha256:e83cd8163c055309cd8b51728aecb876ea94866e0b5487c80c122a15c3809600"},
-    {file = "connected_components_3d-3.1.2-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:5a141728e4f605bf7dc372116e1665904eb36ebcac614ababc141023d4e5f530"},
-    {file = "connected_components_3d-3.1.2-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:ba954e038f9f8b40729f93bd54d7dd63f779f2f41506fe4db2cb4b0e95a721b3"},
-    {file = "connected_components_3d-3.1.2-cp37-cp37m-manylinux2010_x86_64.whl", hash = "sha256:c751fb82937e99c323a1bc92065212925020a40bee031b24769de574f0eb3807"},
-    {file = "connected_components_3d-3.1.2-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:1559279ea1f570d09be6889e5b7be6655b6e223765dd76f9288e5a8c7609ebe7"},
-    {file = "connected_components_3d-3.1.2-cp37-cp37m-win32.whl", hash = "sha256:b131bd99d4951ecea5448e0170f734ce6609bcacc33c6c023d8ace37907f7d1d"},
-    {file = "connected_components_3d-3.1.2-cp37-cp37m-win_amd64.whl", hash = "sha256:613997555d16b8ac80e06f299e93bb27397c8cd69e7475ea93ad9ff1a631e0b8"},
-    {file = "connected_components_3d-3.1.2-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:cc2ece35ab81de5b5997dc327c900ef285ab79614cd162b8d37633a28672344a"},
-    {file = "connected_components_3d-3.1.2-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:9696ec7226b82d6c1b85cd0de81639d6d9fb5e61d9e14fcd3ca78c6a0be0c543"},
-    {file = "connected_components_3d-3.1.2-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:72b3b1d7f784287cb887765c6fd4899f0d97be29c7fdc4daf44c4e3430c82d67"},
-    {file = "connected_components_3d-3.1.2-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:9d5a52b3f42875bb3f60920cd8f0b23a9d14f739ea2428a343a2643c1789dee5"},
-    {file = "connected_components_3d-3.1.2-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:67aec26f9de0f78396df19305ac0e75d77c3771431ce35a66bf0a7c8b9b7bdf2"},
-    {file = "connected_components_3d-3.1.2-cp38-cp38-win32.whl", hash = "sha256:197cd67458569f309f382a7f10c9bff2408dba3b39986606a597a2edd1e52b43"},
-    {file = "connected_components_3d-3.1.2-cp38-cp38-win_amd64.whl", hash = "sha256:a825611d6bf2201b3001b9c799dbc9cd4a1466ccb51b2eb91bdad36e20ed4df9"},
-    {file = "connected_components_3d-3.1.2-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:6a3673cd4d9dce6e369164b6656a6b3435dbf63c9827d903000128209e5aa859"},
-    {file = "connected_components_3d-3.1.2-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:735ad7ac767bec62a78138a0aeb5b97723410fc5b76c2c4f30492ebe66a5f0db"},
-    {file = "connected_components_3d-3.1.2-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:addb2d1bbe45566347914021d4caab3946a7a3550e36af39318e48de39207ddf"},
-    {file = "connected_components_3d-3.1.2-cp39-cp39-win32.whl", hash = "sha256:8d08021b64ec5a0fd22c3f554a54a03096a151b738750f273786cd02386ecc79"},
-    {file = "connected_components_3d-3.1.2-cp39-cp39-win_amd64.whl", hash = "sha256:f2f7ddc02e0760a25d25e360e8a8c399244173a37c3e1401af17aa4f68d08904"},
+    {file = "connected-components-3d-3.17.0.tar.gz", hash = "sha256:acbd20dcd0bdeab3dd521e9cd62798187e7e0e4e3eaa951f33b6557c94044cb2"},
+    {file = "connected_components_3d-3.17.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:6c38263e5ebbb6e0775935236242ae9d08c422344cc7ab9f1b18d23fa8bd91e6"},
+    {file = "connected_components_3d-3.17.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:3e88833fcaa49b716774e87b1019ccbb0076292decaba4392f2665284c5db417"},
+    {file = "connected_components_3d-3.17.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:c6e6141b87d32d4ebbe1cbc8398ad6fc13277e9495177ffc7b64ddce0ef72181"},
+    {file = "connected_components_3d-3.17.0-cp310-cp310-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:1ec8be898cde92b9ae097ee7e649a90e4912620d6fe45e484c8f7110bd3f04e2"},
+    {file = "connected_components_3d-3.17.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e24ccbfe47bc83791a61a3db70889f8ca723c75b49b8d78d7a5448009b95bb8f"},
+    {file = "connected_components_3d-3.17.0-cp310-cp310-win32.whl", hash = "sha256:38afd9d8b472a2c718ad6da0c815372d8e05633941fde40369f5b507fd59dea8"},
+    {file = "connected_components_3d-3.17.0-cp310-cp310-win_amd64.whl", hash = "sha256:edfee397da8f2989699a20ad996751acd59eb12bc9f1b248570146506e34315f"},
+    {file = "connected_components_3d-3.17.0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:1f18ab07f360764f419c82418f9ddb648fd7e1539ab6953ccbae2921018c877c"},
+    {file = "connected_components_3d-3.17.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:852ca02d060c993652a5ad2dcc4c24b58a47ddd4351eae20c8a52df6e1b7efc2"},
+    {file = "connected_components_3d-3.17.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a322615a4af4f6aa41ab5dc5775dab6854a07a4f9bbe9b178212c6bacf44993b"},
+    {file = "connected_components_3d-3.17.0-cp311-cp311-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:4625a517f43da670d56e78c77d69e668f3be07001ba68e3e9338a652c286cba1"},
+    {file = "connected_components_3d-3.17.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fc2dbb31b51b68c20361ae1d66f8393fa7347e69cb83d37fae44a6c3d93ceca6"},
+    {file = "connected_components_3d-3.17.0-cp311-cp311-win32.whl", hash = "sha256:3d95869b644e6b98765f4d74719beec54ed544fe8a2ecd3023ac4c8114557941"},
+    {file = "connected_components_3d-3.17.0-cp311-cp311-win_amd64.whl", hash = "sha256:7f53e6e16f85c0c41ce4a7a59a5aecda7803ea242d7a2ca83b8dded0d7583c05"},
+    {file = "connected_components_3d-3.17.0-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:a384d203be9f5d61eed023d68e272251f3ba59939675218eb24247f26005099a"},
+    {file = "connected_components_3d-3.17.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:8cefe9829f7f3d6c38fc0cd340dcdbd6d1038f232f6ac13478677e9cd3af16b0"},
+    {file = "connected_components_3d-3.17.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3fb7feddc517b1bb9d56d4c6368076803df3f4200e7b83ddd7e6a608361e44bd"},
+    {file = "connected_components_3d-3.17.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:20990ef30de411166fb666be751a09207a6affd8d2054a688451ac19b5973cb2"},
+    {file = "connected_components_3d-3.17.0-cp312-cp312-win32.whl", hash = "sha256:33334a5a526fc80c34a8729ce83fd004ea32de1ec7418007d91b84ffb7817908"},
+    {file = "connected_components_3d-3.17.0-cp312-cp312-win_amd64.whl", hash = "sha256:66b3a3a50d7d9dcb3c4e66f97087bd233ec328d0a9240a19d402709ab1d2928e"},
+    {file = "connected_components_3d-3.17.0-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:ee38bed5b1f0b1b4a8a8cc6987419d029924b78aa620c303a7c4066a30051f86"},
+    {file = "connected_components_3d-3.17.0-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:f857f2995ce63e1524c6787f69052253fb8cf08b7c60f12d2ded42744dc55557"},
+    {file = "connected_components_3d-3.17.0-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a08cba5da1373506018ade1ef47ac769226f409835c3e1849d2ebb76120d8340"},
+    {file = "connected_components_3d-3.17.0-cp38-cp38-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:c8c0130c3941639920cfad7fafebef044e7567f916df812e4cd185cf94f279ac"},
+    {file = "connected_components_3d-3.17.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:456dc8b98826f5c1d5ce8e0116beeb2979890a563d374cb3987bb0ecd49cfcbf"},
+    {file = "connected_components_3d-3.17.0-cp38-cp38-win32.whl", hash = "sha256:6d55f43874042e6d90e52707e48130f1e0bc37c8d37db51f11f798754f604446"},
+    {file = "connected_components_3d-3.17.0-cp38-cp38-win_amd64.whl", hash = "sha256:1ace851cdc8741109a9de528ecc0f0d2ea070a9109cdcea861154a82a7bd4b28"},
+    {file = "connected_components_3d-3.17.0-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:d3f7648f94c6234fdfb46a7807ec72fc1ddd37b9ca3346de055ffc985e466251"},
+    {file = "connected_components_3d-3.17.0-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:aa0de0b29e367705bc22e3ae64786fdf063865a664e5675f9dec8f29facf8b7d"},
+    {file = "connected_components_3d-3.17.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:6dfad8b9442f6370952364f1703d463893e19ba6a95153ecd9e9ecad6420f532"},
+    {file = "connected_components_3d-3.17.0-cp39-cp39-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:b2067bf75b820955de52aacefc25c0049d5748155228a5978c7254c2479af7a0"},
+    {file = "connected_components_3d-3.17.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:10c45c6ea0b23c8f593406bd73530b4f019fe8aa8ba8e7638375a0c2efa09f3a"},
+    {file = "connected_components_3d-3.17.0-cp39-cp39-win32.whl", hash = "sha256:7931c3bacf24102ebda8f7b7a9d706a364e176cfb75b029c2b57d56cc1982808"},
+    {file = "connected_components_3d-3.17.0-cp39-cp39-win_amd64.whl", hash = "sha256:e19265db9218200987d119537f5d386633f1887666afe2d0dc1022e315d321e1"},
 ]
 
 [package.dependencies]
@@ -2244,5 +2248,5 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 
 [metadata]
 lock-version = "2.0"
-python-versions = ">=3.9"
-content-hash = "ef5a15cee20dd8fe3bc9c63f2f599a2666f199fd8e9d691d9ef752e7a6a55840"
+python-versions = ">=3.9,<4.0"
+content-hash = "c79392f1f65a7a8c56e3601607f1c4124a35836e5c38c0f10237ca41d792a312"
