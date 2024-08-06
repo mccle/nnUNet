@@ -6,6 +6,8 @@ from nnunetv2.utilities.helpers import softmax_helper_dim1
 from torch import nn
 from cc3d import connected_components
 
+Blob_Scheduler = 0 #200000
+
 
 class DC_and_CE_loss(nn.Module):
     def __init__(self, soft_dice_kwargs, ce_kwargs, weight_ce=1, weight_dice=1, ignore_label=None,
@@ -58,7 +60,7 @@ class DC_and_CE_loss(nn.Module):
         return result
 
 # currently only for single class
-class blob_DC_and_CE_loss(nn.Module):
+class Blob_DC_and_CE_loss(nn.Module):
     def __init__(self, soft_dice_kwargs, ce_kwargs, weight_ce=1, weight_dice=1, ignore_label=None,
                  dice_class=SoftDiceLoss):
         """
@@ -70,7 +72,7 @@ class blob_DC_and_CE_loss(nn.Module):
         :param weight_ce:
         :param weight_dice:
         """
-        super(blob_DC_and_CE_loss, self).__init__()
+        super(Blob_DC_and_CE_loss, self).__init__()
         if ignore_label is not None:
             ce_kwargs['ignore_index'] = ignore_label
 
@@ -80,6 +82,7 @@ class blob_DC_and_CE_loss(nn.Module):
 
         self.ce = RobustCrossEntropyLoss(**ce_kwargs)
         self.dc = dice_class(apply_nonlin=softmax_helper_dim1, **soft_dice_kwargs)
+        self.calls = 0
  
     # main loss logic called on each instance separately
     def loss(self, net_output: torch.Tensor, target: torch.Tensor):
@@ -110,53 +113,67 @@ class blob_DC_and_CE_loss(nn.Module):
         return result
 
     def forward(self, net_output: torch.Tensor, target: torch.Tensor):
-
+        self.calls += 1
         global_loss = self.loss(net_output, target)
-        blob_loss = 0
+        
+        if self.calls < Blob_Scheduler:
+            return global_loss
+
+        if self.calls == Blob_Scheduler:
+            print("Blob Loss integrated")
+
+        blob_loss = 0.0
+        num_components = 0
 
         for i in range(target.size(0)):
-            binary_output = (torch.sigmoid(net_output[i][0]) >= 0.5).type(torch.uint8).detach().numpy()
-            target_ccs = connected_components(target[i][0].detach().numpy())
-            output_ccs = connected_components(binary_output)
+            binary_output = (torch.sigmoid(net_output[i][0]) >= 0.5).type(torch.uint8)
+            target_ccs = connected_components(target[i][0]).type(torch.uint8)
+            output_ccs = connected_components(binary_output).type(torch.uint8)
 
-            tracked_tumors = target_ccs.max()
+            ccs = [cc for cc in target_ccs.unique() if cc != 0]
 
-            cc_map = {}
+            if len(ccs) > 1:
 
-            for cc in np.unique(output_ccs):
-                if cc != 0:
-                    cc_mask = (output_ccs == cc).astype(int)
+                tracked_tumors = target_ccs.max()
 
-                    tumor_id = (cc_mask * target_ccs).max()
+                cc_map = {}
 
-                    if tumor_id == 0:
-                        tracked_tumors += 1
-                        cc_map[cc] = tracked_tumors
+                for cc in output_ccs.unique():
+                    if cc != 0:
+                        cc_mask = (output_ccs == cc).type(torch.uint8)
 
-                    else:
-                        cc_map[cc] = tumor_id
+                        tumor_id = (cc_mask * target_ccs).max()
 
-            vector_map = np.vectorize(lambda x: cc_map.get(x, x))
-            output_ccs = vector_map(output_ccs)
+                        if tumor_id == 0:
+                            tracked_tumors += 1
+                            cc_map[cc] = tracked_tumors
 
-            for cc in np.unique(target_ccs):
-                if cc != 0:
-                    output_mask = (output_ccs == cc).astype(int)
-                    target_mask = (target_ccs == cc).astype(int)
+                        else:
+                            cc_map[cc] = tumor_id
 
-                    masked_output = net_output[i].unsqueeze(0) * torch.tensor(output_mask, device=net_output.device)
-                    masked_target = target[i].unsqueeze(0) * torch.tensor(target_mask, device=target.device)
+                vector_map = np.vectorize(lambda x: cc_map.get(x, x))
+                output_ccs = torch.tensor(vector_map(output_ccs)).type(torch.uint8) 
+
+                for cc in ccs: 
+                    total_mask = torch.ones(size=target_ccs.size()).to(target.device)
+
+                    for j in ccs:
+                        if j != cc:
+                            total_mask[(target_ccs == j) | (output_ccs == j)] = 0
+
+                    masked_output = net_output[i].unsqueeze(0) * total_mask
+                    masked_target = target[i].unsqueeze(0) * total_mask
 
                     blob_loss += self.loss(masked_output, masked_target)
+                    num_components += 1
+            else:
+                blob_loss += self.loss(net_output[i].unsqueeze(0), target[i].unsqueeze(0))
+                num_components += 1
 
+        blob_loss /= max(num_components, 1)
     
 
-        return (1 * global_loss) + (2 * blob_loss)
-
-
-
-
-
+        return (0.3 * global_loss) + (0.7 * blob_loss)
 
 
 class DC_and_BCE_loss(nn.Module):
@@ -206,6 +223,119 @@ class DC_and_BCE_loss(nn.Module):
             ce_loss = self.ce(net_output, target_regions)
         result = self.weight_ce * ce_loss + self.weight_dice * dc_loss
         return result
+
+
+class Blob_DC_and_BCE_loss(nn.Module):
+    def __init__(self, bce_kwargs, soft_dice_kwargs, weight_ce=1, weight_dice=1, use_ignore_label: bool = False,
+                 dice_class=MemoryEfficientSoftDiceLoss):
+        """
+        DO NOT APPLY NONLINEARITY IN YOUR NETWORK!
+
+        target mut be one hot encoded
+        IMPORTANT: We assume use_ignore_label is located in target[:, -1]!!!
+
+        :param soft_dice_kwargs:
+        :param bce_kwargs:
+        :param aggregate:
+        """
+        super(Blob_DC_and_BCE_loss, self).__init__()
+        if use_ignore_label:
+            bce_kwargs['reduction'] = 'none'
+
+        self.weight_dice = weight_dice
+        self.weight_ce = weight_ce
+        self.use_ignore_label = use_ignore_label
+
+        self.ce = nn.BCEWithLogitsLoss(**bce_kwargs)
+        self.dc = dice_class(apply_nonlin=torch.sigmoid, **soft_dice_kwargs)
+        self.calls = 0
+
+    def loss(self, net_output: torch.Tensor, target: torch.Tensor):
+        if self.use_ignore_label:
+            # target is one hot encoded here. invert it so that it is True wherever we can compute the loss
+            if target.dtype == torch.bool:
+                mask = ~target[:, -1:]
+            else:
+                mask = (1 - target[:, -1:]).bool()
+            # remove ignore channel now that we have the mask
+            # why did we use clone in the past? Should have documented that...
+            # target_regions = torch.clone(target[:, :-1])
+            target_regions = target[:, :-1]
+        else:
+            target_regions = target
+            mask = None
+
+        dc_loss = self.dc(net_output, target_regions, loss_mask=mask)
+        target_regions = target_regions.float()
+        if mask is not None:
+            ce_loss = (self.ce(net_output, target_regions) * mask).sum() / torch.clip(mask.sum(), min=1e-8)
+        else:
+            ce_loss = self.ce(net_output, target_regions)
+        result = self.weight_ce * ce_loss + self.weight_dice * dc_loss
+        return result
+
+    def forward(self, net_output: torch.Tensor, target: torch.Tensor):
+        self.calls += 1
+        global_loss = self.loss(net_output, target)
+        
+        if self.calls < Blob_Scheduler:
+            return global_loss
+
+        if self.calls == Blob_Scheduler:
+            print("Blob Loss integrated")
+
+        blob_loss = 0.0
+        num_components = 0
+
+        for i in range(target.size(0)):
+            binary_output = (torch.sigmoid(net_output[i][0]) >= 0.5).type(torch.uint8)
+            target_ccs = connected_components(target[i][0]).type(torch.uint8)
+            output_ccs = connected_components(binary_output).type(torch.uint8)
+
+            ccs = [cc for cc in target_ccs.unique() if cc != 0]
+
+            if len(ccs) > 1:
+
+                tracked_tumors = target_ccs.max()
+
+                cc_map = {}
+
+                for cc in output_ccs.unique():
+                    if cc != 0:
+                        cc_mask = (output_ccs == cc).type(torch.uint8)
+
+                        tumor_id = (cc_mask * target_ccs).max()
+
+                        if tumor_id == 0:
+                            tracked_tumors += 1
+                            cc_map[cc] = tracked_tumors
+
+                        else:
+                            cc_map[cc] = tumor_id
+
+                vector_map = np.vectorize(lambda x: cc_map.get(x, x))
+                output_ccs = torch.tensor(vector_map(output_ccs)).type(torch.uint8) 
+
+                for cc in ccs: 
+                    total_mask = torch.ones(size=target_ccs.size()).to(target.device)
+
+                    for j in ccs:
+                        if j != cc:
+                            total_mask[(target_ccs == j) | (output_ccs == j)] = 0
+
+                    masked_output = net_output[i].unsqueeze(0) * total_mask
+                    masked_target = target[i].unsqueeze(0) * total_mask
+
+                    blob_loss += self.loss(masked_output, masked_target)
+                    num_components += 1
+            else:
+                blob_loss += self.loss(net_output[i].unsqueeze(0), target[i].unsqueeze(0))
+                num_components += 1
+
+        blob_loss /= max(num_components, 1)
+    
+
+        return (0.3 * global_loss) + (0.7 * blob_loss)
 
 
 class DC_and_topk_loss(nn.Module):
