@@ -53,7 +53,7 @@ def preprocess_fromfiles_save_to_queue(list_of_lists: List[List[str]],
                     pass
         done_event.set()
     except Exception as e:
-        # print(Exception, e)
+        print(Exception, e)
         abort_event.set()
         raise e
 
